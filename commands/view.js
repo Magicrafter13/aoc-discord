@@ -17,10 +17,16 @@ module.exports = {
 
 		const members = leaderboard.data.members;
 
-		let response = `Advent of Code ${leaderboard.data.event}\n\`\`\``;
+		let response = `Advent of Code ${leaderboard.data.event}\n\`\`\`\n         1111111111222222\n1234567890123456789012345\n`;
 		Object.keys(members).forEach(key => {
 			const member = members[key];
-			response += `${member.name}: ${member.stars} stars\n`
+			for (let i = 1; i <= 25; ++i) {
+				const cdl = member.completion_day_level[i];
+				response += cdl
+					? (cdl[2] ? '+' : '-')
+					: ' ';
+			}
+			response += ` ${member.stars} ${member.name}\n`
 		});
 		response += "```\n";
 
