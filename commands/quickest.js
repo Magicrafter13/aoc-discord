@@ -1,5 +1,20 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
+const months = [
+	"Jan",
+	"Feb",
+	"Mar",
+	"Apr",
+	"May",
+	"Jun",
+	"Jul",
+	"Aug",
+	"Sep",
+	"Oct",
+	"Nov",
+	"Dec"
+];
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("quickest")
@@ -68,13 +83,21 @@ module.exports = {
 		if (!person2)
 			return await interaction.editReply(`No user named '${username2}' is registered to the leaderboard!`);
 
-		let response = `Advent of Code ${leaderboard.year}, day ${day}:\n\n`+
-			`${username1}:\n` +
-			`- Part 1: ${person1.completion_day_level[day] ? person1.completion_day_level[day][1].get_star_ts : "unfinished"}\n- Part 2: ${person1.completion_day_level[day] && person1.completion_day_level[day][2] ? person1.completion_day_level[day][2].get_star_ts : "unfinished"}\n\n` +
-			`${username2}:\n` +
-			`- Part 1: ${person2.completion_day_level[day] ? person2.completion_day_level[day][1].get_star_ts : "unfinished"}\n- Part 2: ${person2.completion_day_level[day] && person2.completion_day_level[day][2] ? person2.completion_day_level[day][2].get_star_ts : "unfinished"}\n`;
-		await interaction.editReply(response);
+		// Get necessary dates and convert from unix timestamp to javascript timestamp (multiply by 1000)
+		const date1_1 = person1.completion_day_level[day] ? new Date(person1.completion_day_level[day][1].get_star_ts * 1000) : null;
+		const date1_2 = date1_1 && person1.completion_day_level[day][2] ? new Date(person1.completion_day_level[day][2].get_star_ts * 1000) : null;
+		const date2_1 = person2.completion_day_level[day] ? new Date(person2.completion_day_level[day][1].get_star_ts * 1000) : null;
+		const date2_2 = date2_1 && person2.completion_day_level[day][2] ? new Date(person2.completion_day_level[day][2].get_star_ts * 1000) : null;
 
-		//await interaction.editReply(`Received: person1 = ${person1.value}, person2 = ${person2.value}, day = ${day.value}`);
+		let response = `Advent of Code ${leaderboard.year}, day ${day}:\n` +
+			`\n${username1}:\n` +
+			`- Part 1: ${date1_1 ? `${date1_1.getYear()}-${months[date1_1.getMonth()]}-${date1_1.getDate()} at ${date1_1.getHours()}:${date1_1.getMinutes()}:${date1_1.getSeconds()}.${date1_1.getMilliseconds()}`: "unfinished"}\n`;
+		if (date1_1)
+			response += `- Part 2: ${date1_2 ? `${date1_2.getYear()}-${months[date1_2.getMonth()]}-${date1_2.getDate()} at ${date1_2.getHours()}:${date1_2.getMinutes()}:${date1_2.getSeconds()}.${date1_2.getMilliseconds()}`: "unfinished"}\n`;
+		response += `\n${username2}:\n` +
+			`- Part 1: ${date2_1 ? `${date2_1.getYear()}-${months[date2_1.getMonth()]}-${date2_1.getDate()} at ${date2_1.getHours()}:${date2_1.getMinutes()}:${date2_1.getSeconds()}.${date2_1.getMilliseconds()}`: "unfinished"}\n`;
+		if (date2_1)
+			response += `- Part 2: ${date2_2 ? `${date2_2.getYear()}-${months[date2_2.getMonth()]}-${date2_2.getDate()} at ${date2_2.getHours()}:${date2_2.getMinutes()}:${date2_2.getSeconds()}.${date2_2.getMilliseconds()}`: "unfinished"}\n`;
+		await interaction.editReply(response);
 	},
 };
