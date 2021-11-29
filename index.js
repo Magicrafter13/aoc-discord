@@ -2,7 +2,7 @@ const fs = require('fs');
 
 // Require the necessary discord.js classes
 const { Client, Collection, Intents } = require('discord.js');
-const { token, session, leaderboard_url } = require('./config.json');
+const { token, session, leaderboards } = require('./config.json');
 
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
@@ -13,8 +13,7 @@ const command_files = fs.readdirSync('./commands').filter(file => file.endsWith(
 
 // Init data
 client.session = session;
-client.leaderboard_url = leaderboard_url;
-client.leaderboard = null;
+client.leaderboards = leaderboards;
 
 for (const file of command_files) {
 	const command = require(`./commands/${file}`);
