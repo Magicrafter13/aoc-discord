@@ -17,7 +17,7 @@ module.exports = {
 		// Be nice to AoC "... avoid sending requests more often than once every 15 minutes"
 		const time_since_last_request = now - leaderboard.last_request;
 		if (time_since_last_request < 900000) {
-			if (silent === false)
+			if (!silent)
 				await interaction.reply(`Please wait ${Math.round((900000 - time_since_last_request) / 60000)} minutes before submitting another API request.`);
 			return;
 		}
@@ -57,6 +57,7 @@ module.exports = {
 						leaderboard.data = parsed;
 						if (!silent)
 							interaction.editReply("Got latest data.");
+						console.log(JSON.stringify(parsed));
 						resolve();
 					});
 			});
