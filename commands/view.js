@@ -26,7 +26,7 @@ module.exports = {
 					? (cdl[2] ? '+' : '-')
 					: ' ';
 			}
-			response += ` ${member.stars} ${member.name}\n`
+			response += ` ${member.stars} stars (score: ${member.local_score}) ${member.name}\n`
 		});
 		response += "```\n";
 
