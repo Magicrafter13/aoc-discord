@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("view")
-		.setDescription("Show something"),
+		.setDescription("Display the leaderboard!"),
 	async execute(interaction) {
 		// Get this channel's leaderboard
 		const leaderboard = interaction.client.leaderboards[interaction.channelId];
