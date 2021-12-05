@@ -55,7 +55,7 @@ if (send_notification) {
 	let notify = new cron.CronJob('00 30 20 * * *', () => {
 		const now = new Date(Date.now());
 		if ((now.getMonth() == 10 && now.getDate() == 30) || (now.getMonth() == 11 && now.getDate() < 25)) {
-			Objects.keys(leaderboards).forEach(channelId => {
+			Object.keys(leaderboards).forEach(channelId => {
 				if (leaderboards[channelId] == Date.now().getYear()) {
 					client.guilds.fetch(guildId)
 						.then(guild => {
