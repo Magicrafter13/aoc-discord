@@ -51,12 +51,13 @@ client.on('interactionCreate', async interaction => {
 // Login to Discord with your client's token
 client.login(token);
 
+
 if (send_notification) {
 	let notify = new cron.CronJob('00 30 20 * * *', () => {
 		const now = new Date(Date.now());
 		if ((now.getMonth() == 10 && now.getDate() == 30) || (now.getMonth() == 11 && now.getDate() < 25)) {
 			Object.keys(leaderboards).forEach(channelId => {
-				if (leaderboards[channelId] == Date.now().getYear()) {
+				if (leaderboards[channelId].year == new Date(Date.now()).getFullYear()) {
 					client.guilds.fetch(guildId)
 						.then(guild => {
 							guild.channels.fetch(channelId)
