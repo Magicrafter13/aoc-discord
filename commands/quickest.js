@@ -91,13 +91,13 @@ module.exports = {
 
 		let response = `Advent of Code ${leaderboard.year}, day ${day}:\n` +
 			`\n${username1}:\n` +
-			`- Part 1: ${date1_1 ? `${date1_1.getYear()}-${months[date1_1.getMonth()]}-${date1_1.getDate()} at ${date1_1.getHours()}:${date1_1.getMinutes()}:${date1_1.getSeconds()}.${date1_1.getMilliseconds()}`: "unfinished"}\n`;
+			`- Part 1: ${date1_1 ? `${date1_1.getYear() + 1970}-${months[date1_1.getMonth()]}-${date1_1.getDate()} at ${date1_1.getHours()}:${date1_1.getMinutes()}:${date1_1.getSeconds()}.${date1_1.getMilliseconds()}`: "unfinished"}\n`;
 		if (date1_1)
-			response += `- Part 2: ${date1_2 ? `${date1_2.getYear()}-${months[date1_2.getMonth()]}-${date1_2.getDate()} at ${date1_2.getHours()}:${date1_2.getMinutes()}:${date1_2.getSeconds()}.${date1_2.getMilliseconds()}`: "unfinished"}\n`;
+			response += `- Part 2: ${date1_2 ? `${date1_2.getYear() + 1970}-${months[date1_2.getMonth()]}-${date1_2.getDate()} at ${date1_2.getHours()}:${date1_2.getMinutes()}:${date1_2.getSeconds()}.${date1_2.getMilliseconds()}`: "unfinished"}\n`;
 		response += `\n${username2}:\n` +
-			`- Part 1: ${date2_1 ? `${date2_1.getYear()}-${months[date2_1.getMonth()]}-${date2_1.getDate()} at ${date2_1.getHours()}:${date2_1.getMinutes()}:${date2_1.getSeconds()}.${date2_1.getMilliseconds()}`: "unfinished"}\n`;
+			`- Part 1: ${date2_1 ? `${date2_1.getYear() + 1970}-${months[date2_1.getMonth()]}-${date2_1.getDate()} at ${date2_1.getHours()}:${date2_1.getMinutes()}:${date2_1.getSeconds()}.${date2_1.getMilliseconds()}`: "unfinished"}\n`;
 		if (date2_1)
-			response += `- Part 2: ${date2_2 ? `${date2_2.getYear()}-${months[date2_2.getMonth()]}-${date2_2.getDate()} at ${date2_2.getHours()}:${date2_2.getMinutes()}:${date2_2.getSeconds()}.${date2_2.getMilliseconds()}`: "unfinished"}\n`;
+			response += `- Part 2: ${date2_2 ? `${date2_2.getYear() + 1970}-${months[date2_2.getMonth()]}-${date2_2.getDate()} at ${date2_2.getHours()}:${date2_2.getMinutes()}:${date2_2.getSeconds()}.${date2_2.getMilliseconds()}`: "unfinished"}\n`;
 		await interaction.editReply(response);
 	},
 };
