@@ -2,11 +2,11 @@ const cron = require('cron');
 const fs = require('fs');
 
 // Require the necessary discord.js classes
-const { Client, Collection, Intents } = require('discord.js');
+const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { guildId, token, session, leaderboards, send_notification } = require('./config.json');
 
 // Create a new client instance
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({ intents: [ GatewayIntentBits.Guilds ] });
 
 // Register commands
 client.commands = new Collection();

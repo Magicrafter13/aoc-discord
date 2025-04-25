@@ -28,31 +28,33 @@ module.exports = {
 		.addIntegerOption(option => option.setName("day")
 			.setDescription("Which day would you like to compare?")
 			.setRequired(true)
-			.addChoice("Day 1", 1)
-			.addChoice("Day 2", 2)
-			.addChoice("Day 3", 3)
-			.addChoice("Day 4", 4)
-			.addChoice("Day 5", 5)
-			.addChoice("Day 6", 6)
-			.addChoice("Day 7", 7)
-			.addChoice("Day 8", 8)
-			.addChoice("Day 9", 9)
-			.addChoice("Day 10", 10)
-			.addChoice("Day 11", 11)
-			.addChoice("Day 12", 12)
-			.addChoice("Day 13", 13)
-			.addChoice("Day 14", 14)
-			.addChoice("Day 15", 15)
-			.addChoice("Day 16", 16)
-			.addChoice("Day 17", 17)
-			.addChoice("Day 18", 18)
-			.addChoice("Day 19", 19)
-			.addChoice("Day 20", 20)
-			.addChoice("Day 21", 21)
-			.addChoice("Day 22", 22)
-			.addChoice("Day 23", 23)
-			.addChoice("Day 24", 24)
-			.addChoice("Day 25", 25)),
+			.addChoices(
+				{ name: "Day 1", value: 1 },
+				{ name: "Day 2", value: 2 },
+				{ name: "Day 3", value: 3 },
+				{ name: "Day 4", value: 4 },
+				{ name: "Day 5", value: 5 },
+				{ name: "Day 6", value: 6 },
+				{ name: "Day 7", value: 7 },
+				{ name: "Day 8", value: 8 },
+				{ name: "Day 9", value: 9 },
+				{ name: "Day 10", value: 10 },
+				{ name: "Day 11", value: 11 },
+				{ name: "Day 12", value: 12 },
+				{ name: "Day 13", value: 13 },
+				{ name: "Day 14", value: 14 },
+				{ name: "Day 15", value: 15 },
+				{ name: "Day 16", value: 16 },
+				{ name: "Day 17", value: 17 },
+				{ name: "Day 18", value: 18 },
+				{ name: "Day 19", value: 19 },
+				{ name: "Day 20", value: 20 },
+				{ name: "Day 21", value: 21 },
+				{ name: "Day 22", value: 22 },
+				{ name: "Day 23", value: 23 },
+				{ name: "Day 24", value: 24 },
+				{ name: "Day 25", value: 25 },
+			)),
 	async execute(interaction) {
 		// Get this channel's leaderboard
 		const leaderboard = interaction.client.leaderboards[interaction.channelId];
