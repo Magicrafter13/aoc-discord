@@ -1,23 +1,36 @@
-const cron = require('cron');
-const fs = require('fs');
+import cron from 'cron';
+import { Client, Collection, GatewayIntentBits } from 'discord.js';
+import fs from 'fs';
 
-// Require the necessary discord.js classes
-const { Client, Collection, GatewayIntentBits } = require('discord.js');
-const { guildId, token, session, leaderboards, send_notification: sendNotification } = require('./config.json');
+/*import {
+	guildId,
+	leaderboards,
+	send_notification as sendNotification,
+	session,
+	token,
+} from './config.json' with { type: "json" };*/
+import config from './config.json' with { type: "json" };
+const {
+	guildId,
+	leaderboards,
+	send_notification: sendNotification,
+	session,
+	token,
+} = config;
 
 // Create a new client instance
 const client = new Client({ intents: [ GatewayIntentBits.Guilds ] });
-
-// Register commands
-client.commands = new Collection();
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 // Init data
 client.session = session;
 client.leaderboards = leaderboards;
 
-for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
+// Register commands
+client.commands = new Collection();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const commandModules = await Promise.all(commandFiles.map(file => import(`./commands/${file}`)));
+for (const module of commandModules) {
+	const command = module.default;
 	/*
 	 * Set a new item in the collection
 	 * With the key as the command name and the value as the exported module

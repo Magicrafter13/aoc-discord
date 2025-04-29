@@ -1,7 +1,7 @@
-const https = require('https');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+import { SlashCommandBuilder } from '@discordjs/builders';
+import https from 'https';
 
-module.exports = {
+export default {
 	data: new SlashCommandBuilder()
 		.setName("refresh")
 		.setDescription("Downloads latest data from AoC API."),

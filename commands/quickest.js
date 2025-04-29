@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+import { SlashCommandBuilder } from '@discordjs/builders';
 
 const months = [
 	"Jan",
@@ -15,7 +15,7 @@ const months = [
 	"Dec"
 ];
 
-module.exports = {
+export default {
 	data: new SlashCommandBuilder()
 		.setName("quickest")
 		.setDescription("Compare submission times between users.")
