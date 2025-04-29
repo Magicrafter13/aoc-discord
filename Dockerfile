@@ -18,7 +18,7 @@ RUN npm install --omit=dev --fund=false --update-notifier=false
 ## Main Files
 
 COPY LICENSE ./
-COPY deploy-commands.js ./
+COPY deploy-commands.mjs ./
 COPY index.mjs ./
 COPY commands ./commands
 
