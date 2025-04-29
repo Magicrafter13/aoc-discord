@@ -19,9 +19,9 @@ RUN npm install --omit=dev --fund=false --update-notifier=false
 
 COPY LICENSE ./
 COPY deploy-commands.js ./
-COPY index.js ./
+COPY index.mjs ./
 COPY commands ./commands
 
 # Runtime
 
-CMD ["node", "index.js"]
+CMD ["node", "index.mjs"]
