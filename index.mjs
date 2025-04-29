@@ -27,7 +27,7 @@ client.leaderboards = leaderboards;
 
 // Register commands
 client.commands = new Collection();
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.mjs'));
 const commandModules = await Promise.all(commandFiles.map(file => import(`./commands/${file}`)));
 for (const module of commandModules) {
 	const command = module.default;
