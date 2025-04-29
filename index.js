@@ -3,20 +3,20 @@ const fs = require('fs');
 
 // Require the necessary discord.js classes
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
-const { guildId, token, session, leaderboards, send_notification } = require('./config.json');
+const { guildId, token, session, leaderboards, send_notification: sendNotification } = require('./config.json');
 
 // Create a new client instance
 const client = new Client({ intents: [ GatewayIntentBits.Guilds ] });
 
 // Register commands
 client.commands = new Collection();
-const command_files = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 // Init data
 client.session = session;
 client.leaderboards = leaderboards;
 
-for (const file of command_files) {
+for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	/*
 	 * Set a new item in the collection
@@ -52,12 +52,18 @@ client.on('interactionCreate', async interaction => {
 client.login(token);
 
 
-if (send_notification) {
-	let notify = new cron.CronJob('00 30 20 * * *', () => {
+const NOVEMBER = 10;
+const NOVEMBER_LAST_DAY = 30;
+const DECEMBER = 11;
+const CHRISTMAS_DAY = 25;
+
+
+if (sendNotification) {
+	const notify = new cron.CronJob('00 30 20 * * *', () => {
 		const now = new Date(Date.now());
-		if ((now.getMonth() == 10 && now.getDate() == 30) || (now.getMonth() == 11 && now.getDate() < 25)) {
+		if ((now.getMonth() === NOVEMBER && now.getDate() === NOVEMBER_LAST_DAY) || (now.getMonth() === DECEMBER && now.getDate() < CHRISTMAS_DAY)) {
 			Object.keys(leaderboards).forEach(channelId => {
-				if (leaderboards[channelId].year == new Date(Date.now()).getFullYear()) {
+				if (leaderboards[channelId].year === new Date(Date.now()).getFullYear()) {
 					client.guilds.fetch(guildId)
 						.then(guild => {
 							guild.channels.fetch(channelId)
