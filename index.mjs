@@ -1,15 +1,8 @@
-import cron from 'cron';
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
+import config from './config.json' with { type: "json" };
+import cron from 'cron';
 import fs from 'fs';
 
-/*import {
-	guildId,
-	leaderboards,
-	send_notification as sendNotification,
-	session,
-	token,
-} from './config.json' with { type: "json" };*/
-import config from './config.json' with { type: "json" };
 const {
 	guildId,
 	leaderboards,

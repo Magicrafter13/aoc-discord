@@ -15,6 +15,9 @@ const months = [
 	"Dec"
 ];
 
+const MS_IN_S = 1_000;
+const UNIX_EPOCH_YEAR = 1900;
+
 export default {
 	data: new SlashCommandBuilder()
 		.setName("quickest")
@@ -58,15 +61,17 @@ export default {
 	async execute(interaction) {
 		// Get this channel's leaderboard
 		const leaderboard = interaction.client.leaderboards[interaction.channelId];
-		if (!leaderboard)
-			return await interaction.reply("This channel is not linked with an Advent of Code leaderboard!");
+		if (!leaderboard) {
+			await interaction.reply("This channel is not linked with an Advent of Code leaderboard!");
+			return;
+		}
 
 		await interaction.deferReply();
 
 		// Make sure we have latest data
 		await interaction.client.commands.get("refresh").execute(interaction, true);
 
-		const members = leaderboard.data.members;
+		const { members } = leaderboard.data;
 
 		const username1 = interaction.options.get("person1", true).value;
 		const username2 = interaction.options.get("person2", true).value;
@@ -80,26 +85,30 @@ export default {
 			if (member.name === username2)
 				person2 = member;
 		});
-		if (!person1)
-			return await interaction.editReply(`No user named '${username1}' is registered to the leaderboard!`);
-		if (!person2)
-			return await interaction.editReply(`No user named '${username2}' is registered to the leaderboard!`);
+		if (!person1) {
+			await interaction.editReply(`No user named '${username1}' is registered to the leaderboard!`);
+			return;
+		}
+		if (!person2) {
+			await interaction.editReply(`No user named '${username2}' is registered to the leaderboard!`);
+			return;
+		}
 
 		// Get necessary dates and convert from unix timestamp to javascript timestamp (multiply by 1000)
-		const date1_1 = person1.completion_day_level[day] ? new Date(person1.completion_day_level[day][1].get_star_ts * 1000) : null;
-		const date1_2 = date1_1 && person1.completion_day_level[day][2] ? new Date(person1.completion_day_level[day][2].get_star_ts * 1000) : null;
-		const date2_1 = person2.completion_day_level[day] ? new Date(person2.completion_day_level[day][1].get_star_ts * 1000) : null;
-		const date2_2 = date2_1 && person2.completion_day_level[day][2] ? new Date(person2.completion_day_level[day][2].get_star_ts * 1000) : null;
+		const date1x1 = person1.completion_day_level[day] ? new Date(person1.completion_day_level[day][1].get_star_ts * MS_IN_S) : null;
+		const date1x2 = date1x1 && person1.completion_day_level[day][2] ? new Date(person1.completion_day_level[day][2].get_star_ts * MS_IN_S) : null;
+		const date2x1 = person2.completion_day_level[day] ? new Date(person2.completion_day_level[day][1].get_star_ts * MS_IN_S) : null;
+		const date2x2 = date2x1 && person2.completion_day_level[day][2] ? new Date(person2.completion_day_level[day][2].get_star_ts * MS_IN_S) : null;
 
 		let response = `Advent of Code ${leaderboard.year}, day ${day}:\n` +
 			`\n${username1}:\n` +
-			`- Part 1: ${date1_1 ? `${date1_1.getYear() + 1900}-${months[date1_1.getMonth()]}-${date1_1.getDate()} at ${date1_1.getHours()}:${date1_1.getMinutes()}:${date1_1.getSeconds()}.${date1_1.getMilliseconds()}`: "unfinished"}\n`;
-		if (date1_1)
-			response += `- Part 2: ${date1_2 ? `${date1_2.getYear() + 1900}-${months[date1_2.getMonth()]}-${date1_2.getDate()} at ${date1_2.getHours()}:${date1_2.getMinutes()}:${date1_2.getSeconds()}.${date1_2.getMilliseconds()}`: "unfinished"}\n`;
+			`- Part 1: ${date1x1 ? `${date1x1.getYear() + UNIX_EPOCH_YEAR}-${months[date1x1.getMonth()]}-${date1x1.getDate()} at ${date1x1.getHours()}:${date1x1.getMinutes()}:${date1x1.getSeconds()}.${date1x1.getMilliseconds()}`: "unfinished"}\n`;
+		if (date1x1)
+			response += `- Part 2: ${date1x2 ? `${date1x2.getYear() + UNIX_EPOCH_YEAR}-${months[date1x2.getMonth()]}-${date1x2.getDate()} at ${date1x2.getHours()}:${date1x2.getMinutes()}:${date1x2.getSeconds()}.${date1x2.getMilliseconds()}`: "unfinished"}\n`;
 		response += `\n${username2}:\n` +
-			`- Part 1: ${date2_1 ? `${date2_1.getYear() + 1900}-${months[date2_1.getMonth()]}-${date2_1.getDate()} at ${date2_1.getHours()}:${date2_1.getMinutes()}:${date2_1.getSeconds()}.${date2_1.getMilliseconds()}`: "unfinished"}\n`;
-		if (date2_1)
-			response += `- Part 2: ${date2_2 ? `${date2_2.getYear() + 1900}-${months[date2_2.getMonth()]}-${date2_2.getDate()} at ${date2_2.getHours()}:${date2_2.getMinutes()}:${date2_2.getSeconds()}.${date2_2.getMilliseconds()}`: "unfinished"}\n`;
+			`- Part 1: ${date2x1 ? `${date2x1.getYear() + UNIX_EPOCH_YEAR}-${months[date2x1.getMonth()]}-${date2x1.getDate()} at ${date2x1.getHours()}:${date2x1.getMinutes()}:${date2x1.getSeconds()}.${date2x1.getMilliseconds()}`: "unfinished"}\n`;
+		if (date2x1)
+			response += `- Part 2: ${date2x2 ? `${date2x2.getYear() + UNIX_EPOCH_YEAR}-${months[date2x2.getMonth()]}-${date2x2.getDate()} at ${date2x2.getHours()}:${date2x2.getMinutes()}:${date2x2.getSeconds()}.${date2x2.getMilliseconds()}`: "unfinished"}\n`;
 		await interaction.editReply(response);
 	},
 };

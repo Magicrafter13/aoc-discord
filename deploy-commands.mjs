@@ -1,8 +1,8 @@
-import { Routes } from 'discord-api-types/v9';
-import { REST } from '@discordjs/rest';
-import fs from 'fs';
-
 import config from './config.json' with { type: "json" };
+import fs from 'fs';
+import { REST } from '@discordjs/rest';
+import { Routes } from 'discord-api-types/v9';
+
 const {
 	clientId,
 	guildId,

@@ -1,6 +1,8 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
 import https from 'https';
+import { SlashCommandBuilder } from '@discordjs/builders';
 
+const MS_IN_FIFTEEN_MINUTES = 900000;
+const MS_IN_MINUTE = 60000;
 export default {
 	data: new SlashCommandBuilder()
 		.setName("refresh")
@@ -8,17 +10,19 @@ export default {
 	async execute(interaction, silent) {
 		// Get leaderboard obj for this channel
 		const leaderboard = interaction.client.leaderboards[interaction.channelId];
-		if (!leaderboard)
-			return await interaction.reply("This channel is not linked to an Advent of Code leaderboard!");
+		if (!leaderboard) {
+			await interaction.reply("This channel is not linked to an Advent of Code leaderboard!");
+			return;
+		}
 
 		// Get current time
 		const now = Date.now();
 
 		// Be nice to AoC "... avoid sending requests more often than once every 15 minutes"
-		const time_since_last_request = now - leaderboard.last_request;
-		if (time_since_last_request < 900000) {
+		const timeSinceLastRequest = now - leaderboard.last_request;
+		if (timeSinceLastRequest < MS_IN_FIFTEEN_MINUTES) {
 			if (!silent)
-				await interaction.reply(`Please wait ${Math.round((900000 - time_since_last_request) / 60000)} minutes before submitting another API request.`);
+				await interaction.reply(`Please wait ${Math.round((MS_IN_FIFTEEN_MINUTES - timeSinceLastRequest) / MS_IN_MINUTE)} minutes before submitting another API request.`);
 			return;
 		}
 
@@ -39,17 +43,17 @@ export default {
 			const request = https.request(options, res => {
 				console.log(`statusCode: ${res.statusCode}`);
 
-				let data = [];
+				const dataBlocks = [];
 				res
-					.on('data', d => data.push(d))
+					.on('data', data => dataBlocks.push(data))
 					.on('end', () => {
 						let parsed;
 						try {
-							parsed = JSON.parse(Buffer.concat(data));
+							parsed = JSON.parse(Buffer.concat(dataBlocks));
 						}
-						catch (e) {
+						catch {
 							interaction.editReply("There was an error parsing the data from AoC!");
-							reject("Bad JSON data!");
+							reject(new TypeError("Bad JSON data!"));
 						}
 						// Update timestamp
 						leaderboard.last_request = now;
@@ -65,11 +69,11 @@ export default {
 				console.error(error)
 				if (!silent)
 					interaction.editReply("There was an error downloading from AoC!");
-				reject("There was an error downloading from AoC!");
+				reject(new Error("There was an error downloading from AoC!"));
 			});
 			request.end();
 		});
 
-		return promise;
+		await promise;
 	},
 };
